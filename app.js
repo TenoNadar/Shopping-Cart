@@ -4,7 +4,9 @@ const app = express();
 const morgan = require('morgan');
 const productRoutes = require('./API/routes/products');
 const orderRoutes = require('./API/routes/order');
+const mongoose = require ('mongoose');
 
+mongoose.connect('mongodb://localhost/SHOPP')
 app.use(morgan('dev'));
 
 app.use(bodyParser.urlencoded({extended:false}));

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
+const mongoose = require ('mongoose');
+const Product = require('../models/products')
 router.get('/',(req , res , next) =>{
     res.status(200).json({
         message:'Handling GET request'
@@ -8,10 +9,13 @@ router.get('/',(req , res , next) =>{
 });
 
 router.post('/',(req , res , next) =>{
-    const product = {
+    const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price:req.body.price
-    };
+    });
+     product.save().exec()
+    
     res.status(200).json({
         message:'Handling POST request',
         createdProduct: product
