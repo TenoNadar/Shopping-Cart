@@ -14,26 +14,41 @@ router.post('/',(req , res , next) =>{
         name: req.body.name,
         price:req.body.price
     });
-     product.save().exec()
-    
-    res.status(200).json({
-        message:'Handling POST request',
-        createdProduct: product
-    });
+     product.save().then(result => {
+         console.log(result);
+         res.status(200).json({
+            message:'Handling POST request',
+            createdProduct: product
+        });
+     })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error:err
+        });
+    });   
 });
 
 router.get('/:productId',(req , res , next) => {
     const id = req.params.productId;
-    if (id === 'special') {
-        res.status(200).json({
-           message:'You discovered a new ID',
-           id: id
+    Product.findById(id).exec().then(
+        doc => {
+            console.log(doc);
+          if(doc) {
+              res.status(500).json(doc);
+          } else{
+              res.status(404).json({
+                  message:'no valid Id'
+              })
+          }
+            
+        }
+    ).catch(err => {
+        console.log(err)
+        res.status(500).json({
+            error:err
         });
-    }else{
-        res.status(200).json({
-            message:'You passed a ID'
-        });
-    }
+    });
 });
 
 router.patch('/:productId',(req , res , next) => {
